@@ -2,13 +2,13 @@ package com.example.vallerydental.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-public class Patient {
+public class Staff {
     @Id
-    @Column(name = "cnppatient", nullable = false, length = 13)
-    private String cnppatient;
+    @Column(name = "cnpstaff", nullable = false, length = 13)
+    private String cnpstaff;
 
     @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
@@ -19,18 +19,24 @@ public class Patient {
     @Column(name = "gender", length = Integer.MAX_VALUE)
     private String gender;
 
+    @Column(name = "phone", length = 20)
+    private String phone;
+
     @Column(name = "email", length = 100)
     private String email;
 
-    @Column(name = "dateofbirth")
-    private LocalDate dateofbirth;
+    @Column(name = "staffrole", length = 20)
+    private String staffrole;
 
-    public LocalDate getDateofbirth() {
-        return dateofbirth;
+    @ManyToMany(mappedBy = "assistants")
+    private List<Appointment> appointments;
+
+    public String getStaffrole() {
+        return staffrole;
     }
 
-    public void setDateofbirth(LocalDate dateofbirth) {
-        this.dateofbirth = dateofbirth;
+    public void setStaffrole(String staffrole) {
+        this.staffrole = staffrole;
     }
 
     public String getEmail() {
@@ -39,6 +45,14 @@ public class Patient {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getGender() {
@@ -65,11 +79,11 @@ public class Patient {
         this.firstname = firstname;
     }
 
-    public String getCnppatient() {
-        return cnppatient;
+    public String getCnpstaff() {
+        return cnpstaff;
     }
 
-    public void setCnppatient(String cnppatient) {
-        this.cnppatient = cnppatient;
+    public void setCnpstaff(String cnpstaff) {
+        this.cnpstaff = cnpstaff;
     }
 }

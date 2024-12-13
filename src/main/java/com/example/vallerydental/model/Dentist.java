@@ -1,14 +1,15 @@
 package com.example.vallerydental.model;
 
-import jakarta.persistence.*;
-
-import java.time.LocalDate;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
-public class Patient {
+public class Dentist {
+
     @Id
-    @Column(name = "cnppatient", nullable = false, length = 13)
-    private String cnppatient;
+    @Column(name = "cnpdentist", nullable = false, length = 13)
+    private String cnpdentist;
 
     @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
@@ -16,22 +17,17 @@ public class Patient {
     @Column(name = "lastname", nullable = false, length = 50)
     private String lastname;
 
+    @Column(name = "specialization", length = 50)
+    private String specialization;
+
     @Column(name = "gender", length = Integer.MAX_VALUE)
     private String gender;
 
+    @Column(name = "phone", length = 20)
+    private String phone;
+
     @Column(name = "email", length = 100)
     private String email;
-
-    @Column(name = "dateofbirth")
-    private LocalDate dateofbirth;
-
-    public LocalDate getDateofbirth() {
-        return dateofbirth;
-    }
-
-    public void setDateofbirth(LocalDate dateofbirth) {
-        this.dateofbirth = dateofbirth;
-    }
 
     public String getEmail() {
         return email;
@@ -41,12 +37,28 @@ public class Patient {
         this.email = email;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public String getGender() {
         return gender;
     }
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
     }
 
     public String getLastname() {
@@ -65,11 +77,11 @@ public class Patient {
         this.firstname = firstname;
     }
 
-    public String getCnppatient() {
-        return cnppatient;
+    public String getCnpdentist() {
+        return cnpdentist;
     }
 
-    public void setCnppatient(String cnppatient) {
-        this.cnppatient = cnppatient;
+    public void setCnpdentist(String cnpdentist) {
+        this.cnpdentist = cnpdentist;
     }
 }

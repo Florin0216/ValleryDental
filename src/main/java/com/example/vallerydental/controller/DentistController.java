@@ -1,7 +1,7 @@
 package com.example.vallerydental.controller;
 
-import com.example.vallerydental.model.Doctor;
-import com.example.vallerydental.service.DoctorService;
+import com.example.vallerydental.model.Dentist;
+import com.example.vallerydental.service.DentistService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,16 +11,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/doctor")
-public class DoctorController {
-    private final DoctorService doctorService;
+public class DentistController {
+    private final DentistService dentistService;
 
-    public DoctorController(DoctorService doctorService) {
-        this.doctorService = doctorService;
+    public DentistController(DentistService dentistService) {
+        this.dentistService = dentistService;
     }
 
     @GetMapping("/display")
-    public ResponseEntity<List<Doctor>> displayDoctors() {
-        List<Doctor> doctors = doctorService.getAllDoctors();
+    public ResponseEntity<List<Dentist>> displayDoctors() {
+        List<Dentist> doctors = dentistService.getAllDoctors();
         return ResponseEntity.ok().body(doctors);
     }
 }

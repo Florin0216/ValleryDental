@@ -1,16 +1,14 @@
 package com.example.vallerydental.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import com.example.vallerydental.model.Patient;
 import com.example.vallerydental.service.PatientService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/patient")
+@Controller
 public class PatientController {
     private final PatientService patientService;
 
@@ -18,9 +16,10 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/display")
-    public ResponseEntity<List<Patient>> displayPatients() {
+    @GetMapping("/patients")
+    public String displayPatients(Model model) {
         List<Patient> patients = patientService.getAllPatients();
-        return ResponseEntity.ok().body(patients);
+        model.addAttribute("patients", patients);
+        return "patients";
     }
 }
