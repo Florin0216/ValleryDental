@@ -1,21 +1,24 @@
 package com.example.vallerydental.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Dentist {
-
     @Id
-    @Column(name = "cnpdentist", nullable = false, length = 13)
-    private String cnpdentist;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "dentistid", nullable = false)
+    private Integer id;
 
     @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
 
     @Column(name = "lastname", nullable = false, length = 50)
     private String lastname;
+
+    @Column(name = "cnpdentist", nullable = false, length = 13)
+    private String cnpdentist;
 
     @Column(name = "specialization", length = 50)
     private String specialization;
@@ -28,6 +31,9 @@ public class Dentist {
 
     @Column(name = "email", length = 100)
     private String email;
+
+    @ManyToMany(mappedBy = "dentists")
+    private List<Room> rooms;
 
     public String getEmail() {
         return email;
@@ -61,6 +67,14 @@ public class Dentist {
         this.specialization = specialization;
     }
 
+    public String getCnpdentist() {
+        return cnpdentist;
+    }
+
+    public void setCnpdentist(String cnpdentist) {
+        this.cnpdentist = cnpdentist;
+    }
+
     public String getLastname() {
         return lastname;
     }
@@ -77,11 +91,11 @@ public class Dentist {
         this.firstname = firstname;
     }
 
-    public String getCnpdentist() {
-        return cnpdentist;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCnpdentist(String cnpdentist) {
-        this.cnpdentist = cnpdentist;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

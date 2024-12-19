@@ -1,9 +1,6 @@
 package com.example.vallerydental.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,8 +8,9 @@ import java.util.List;
 @Entity
 public class Treatment {
     @Id
-    @Column(name = "treatmentid", nullable = false, length = 10)
-    private String treatmentid;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "treatmentid", nullable = false)
+    private Integer id;
 
     @Column(name = "treatmentname", nullable = false, length = 50)
     private String treatmentname;
@@ -53,11 +51,11 @@ public class Treatment {
         this.treatmentname = treatmentname;
     }
 
-    public String getTreatmentid() {
-        return treatmentid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setTreatmentid(String treatmentid) {
-        this.treatmentid = treatmentid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

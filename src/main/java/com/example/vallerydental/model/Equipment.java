@@ -8,8 +8,9 @@ import java.util.List;
 @Entity
 public class Equipment {
     @Id
-    @Column(name = "equipmentid", nullable = false, length = 10)
-    private String equipmentid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "equipmentid", nullable = false)
+    private Integer id;
 
     @Column(name = "equipmentname", nullable = false, length = 50)
     private String equipmentname;
@@ -47,11 +48,11 @@ public class Equipment {
         this.equipmentname = equipmentname;
     }
 
-    public String getEquipmentid() {
-        return equipmentid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setEquipmentid(String equipmentid) {
-        this.equipmentid = equipmentid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

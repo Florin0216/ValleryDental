@@ -7,14 +7,21 @@ import java.time.LocalDate;
 @Entity
 public class Patient {
     @Id
-    @Column(name = "cnppatient", nullable = false, length = 13)
-    private String cnppatient;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "patientid", nullable = false)
+    private Integer id;
 
     @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
 
     @Column(name = "lastname", nullable = false, length = 50)
     private String lastname;
+
+    @Column(name = "cnppatient", nullable = false, length = 13)
+    private String cnppatient;
+
+    @Column(name = "phone", length = 20)
+    private String phone;
 
     @Column(name = "gender", length = Integer.MAX_VALUE)
     private String gender;
@@ -49,6 +56,22 @@ public class Patient {
         this.gender = gender;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getCnppatient() {
+        return cnppatient;
+    }
+
+    public void setCnppatient(String cnppatient) {
+        this.cnppatient = cnppatient;
+    }
+
     public String getLastname() {
         return lastname;
     }
@@ -65,11 +88,11 @@ public class Patient {
         this.firstname = firstname;
     }
 
-    public String getCnppatient() {
-        return cnppatient;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCnppatient(String cnppatient) {
-        this.cnppatient = cnppatient;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

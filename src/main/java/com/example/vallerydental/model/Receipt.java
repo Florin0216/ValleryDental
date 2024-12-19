@@ -9,8 +9,9 @@ import java.util.List;
 @Entity
 public class Receipt {
     @Id
-    @Column(name = "receiptid", nullable = false, length = 10)
-    private String receiptid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "receiptid", nullable = false)
+    private Integer id;
 
     @Column(name = "totalcost")
     private BigDecimal totalcost;
@@ -19,8 +20,8 @@ public class Receipt {
     private LocalDate issueddate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "cnppatient", nullable = false)
-    private Patient cnppatient;
+    @JoinColumn(name = "patientid", nullable = false)
+    private Patient patient;
 
     @ManyToMany
     @JoinTable(
@@ -30,12 +31,12 @@ public class Receipt {
     )
     private List<Treatment> treatments;
 
-    public Patient getCnppatient() {
-        return cnppatient;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setCnppatient(Patient cnppatient) {
-        this.cnppatient = cnppatient;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public LocalDate getIssueddate() {
@@ -54,11 +55,11 @@ public class Receipt {
         this.totalcost = totalcost;
     }
 
-    public String getReceiptid() {
-        return receiptid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setReceiptid(String receiptid) {
-        this.receiptid = receiptid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

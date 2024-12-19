@@ -7,8 +7,9 @@ import java.util.List;
 @Entity
 public class Room {
     @Id
-    @Column(name = "roomid", nullable = false, length = 3)
-    private String roomid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "roomid", nullable = false)
+    private Integer id;
 
     @Column(name = "roomname", nullable = false, length = 50)
     private String roomname;
@@ -22,6 +23,14 @@ public class Room {
     @ManyToMany
     @JoinTable(
             name = "Uses",
+            joinColumns = @JoinColumn(name = "roomID"),
+            inverseJoinColumns = @JoinColumn(name = "dentistID")
+    )
+    private List<Dentist> dentists;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Holds",
             joinColumns = @JoinColumn(name = "roomID"),
             inverseJoinColumns = @JoinColumn(name = "equipmentID")
     )
@@ -51,11 +60,11 @@ public class Room {
         this.roomname = roomname;
     }
 
-    public String getRoomid() {
-        return roomid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setRoomid(String roomid) {
-        this.roomid = roomid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

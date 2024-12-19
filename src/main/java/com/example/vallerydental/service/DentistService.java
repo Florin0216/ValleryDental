@@ -14,7 +14,7 @@ public class DentistService {
         this.dentistRepository = dentistRepository;
     }
 
-    public List<Dentist> getAllDoctors() {
+    public List<Dentist> getAllDentist() {
         return dentistRepository.findAll();
     }
 }

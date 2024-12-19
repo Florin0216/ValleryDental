@@ -7,14 +7,18 @@ import java.util.List;
 @Entity
 public class Staff {
     @Id
-    @Column(name = "cnpstaff", nullable = false, length = 13)
-    private String cnpstaff;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "staffid", nullable = false)
+    private Integer id;
 
     @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
 
     @Column(name = "lastname", nullable = false, length = 50)
     private String lastname;
+
+    @Column(name = "cnpstaff", nullable = false, length = 13)
+    private String cnpstaff;
 
     @Column(name = "gender", length = Integer.MAX_VALUE)
     private String gender;
@@ -63,6 +67,14 @@ public class Staff {
         this.gender = gender;
     }
 
+    public String getCnpstaff() {
+        return cnpstaff;
+    }
+
+    public void setCnpstaff(String cnpstaff) {
+        this.cnpstaff = cnpstaff;
+    }
+
     public String getLastname() {
         return lastname;
     }
@@ -79,11 +91,11 @@ public class Staff {
         this.firstname = firstname;
     }
 
-    public String getCnpstaff() {
-        return cnpstaff;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCnpstaff(String cnpstaff) {
-        this.cnpstaff = cnpstaff;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
