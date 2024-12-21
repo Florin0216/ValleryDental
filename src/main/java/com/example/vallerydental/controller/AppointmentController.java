@@ -24,7 +24,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments/{id}")
-    public String getAppointmentsForPatient(@PathVariable Integer id, Model model) {
+    public String getPatientAppointments(@PathVariable Integer id, Model model) {
         List<Appointment> appointments = appointmentService.getAppointmentsForPatient(id);
         Patient patient = patientService.getPatientById(id);
         model.addAttribute("patient", patient);
@@ -33,7 +33,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointments/new/{id}")
-    public String createAppointment(@PathVariable Integer id, Model model) {
+    public String showCreateAppointmentForm(@PathVariable Integer id, Model model) {
         Appointment appointment = new Appointment();
         Patient patient = patientService.getPatientById(id);
         List<Dentist> dentists = dentistService.getAllDentist();
@@ -41,23 +41,23 @@ public class AppointmentController {
         model.addAttribute("dentists", dentists);
         model.addAttribute("patient", patient);
         model.addAttribute("appointment", appointment);
-        return "Appointment/newAppointment";
+        return "Appointment/createAppointment";
     }
 
     @PostMapping("/appointments")
-    public String saveAppointment(@ModelAttribute("appointment") Appointment appointment) {
+    public String createAppointment(@ModelAttribute("appointment") Appointment appointment) {
         appointment.setStatus("Scheduled");
         appointmentService.addAppointment(appointment);
         return "redirect:/appointments/" + appointment.getPatient().getId();
     }
 
     @GetMapping("/appointments/edit/{id}")
-    public String editAppointment(@PathVariable Integer id, Model model) {
+    public String showEditAppointmentForm(@PathVariable Integer id, Model model) {
         Appointment appointment = appointmentService.getAppointmentById(id);
         List<Dentist> dentists = dentistService.getAllDentist();
         model.addAttribute("dentists", dentists);
         model.addAttribute("appointment", appointment);
-        return "Appointment/editAppointment";
+        return "Appointment/updateAppointment";
     }
 
     @PostMapping("/appointments/edit/{id}")

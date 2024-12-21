@@ -14,7 +14,31 @@ public class DentistService {
         this.dentistRepository = dentistRepository;
     }
 
+    public Dentist getDentistById(int id) {
+        return dentistRepository.findById(id).orElse(null);
+    }
+
     public List<Dentist> getAllDentist() {
         return dentistRepository.findAll();
+    }
+
+    public void createDentist(Dentist dentist) {
+        dentistRepository.save(dentist);
+    }
+
+    public void updateDentist(Integer id, Dentist dentist) {
+        Dentist existingDentist = dentistRepository.getReferenceById(id);
+        existingDentist.setFirstname(dentist.getFirstname());
+        existingDentist.setLastname(dentist.getLastname());
+        existingDentist.setEmail(dentist.getEmail());
+        existingDentist.setPhone(dentist.getPhone());
+        existingDentist.setGender(dentist.getGender());
+        existingDentist.setCnpdentist(dentist.getCnpdentist());
+        existingDentist.setSpecialization(dentist.getSpecialization());
+        dentistRepository.save(existingDentist);
+    }
+
+    public void deleteDentist(int id) {
+        dentistRepository.deleteById(id);
     }
 }

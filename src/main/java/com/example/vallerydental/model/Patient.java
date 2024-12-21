@@ -1,6 +1,7 @@
 package com.example.vallerydental.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -30,6 +31,7 @@ public class Patient {
     private String email;
 
     @Column(name = "dateofbirth")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateofbirth;
 
     public LocalDate getDateofbirth() {
