@@ -1,7 +1,9 @@
 package com.example.vallerydental.service;
 
 import com.example.vallerydental.model.Dentist;
+import com.example.vallerydental.model.Role;
 import com.example.vallerydental.repository.DentistRepository;
+import com.example.vallerydental.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +11,11 @@ import java.util.List;
 @Service
 public class DentistService {
     private final DentistRepository dentistRepository;
+    private final RoleRepository roleRepository;
 
-    public DentistService(DentistRepository dentistRepository) {
+    public DentistService(DentistRepository dentistRepository, RoleRepository roleRepository) {
         this.dentistRepository = dentistRepository;
+        this.roleRepository = roleRepository;
     }
 
     public Dentist getDentistById(int id) {
@@ -23,6 +27,9 @@ public class DentistService {
     }
 
     public void createDentist(Dentist dentist) {
+        Role userRole = roleRepository.findByName("USER");
+        Role adminRole = roleRepository.findByName("ADMIN");
+        dentist.getUser().setRoles(List.of(userRole, adminRole));
         dentistRepository.save(dentist);
     }
 

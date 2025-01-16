@@ -6,11 +6,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Entity
-public class Patient {
+@Table(name = "Patient")
+public class Patient{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "patientid", nullable = false)
     private Integer id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userid", nullable = false)
+    private User user;
 
     @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
@@ -88,6 +93,14 @@ public class Patient {
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Integer getId() {

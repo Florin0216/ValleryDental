@@ -1,7 +1,11 @@
 package com.example.vallerydental.service;
 
 import com.example.vallerydental.model.Patient;
+import com.example.vallerydental.model.Role;
 import com.example.vallerydental.repository.PatientRepository;
+import com.example.vallerydental.repository.RoleRepository;
+import com.example.vallerydental.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +13,13 @@ import java.util.List;
 @Service
 public class PatientService {
     private final PatientRepository patientRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.patientRepository = patientRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Patient getPatientById(Integer id) {
@@ -23,6 +31,10 @@ public class PatientService {
     }
 
     public void addPatient(Patient patient) {
+        String encodedPassword = passwordEncoder.encode(patient.getUser().getPassword());
+        patient.getUser().setPassword(encodedPassword);
+        Role role = roleRepository.findByName("ROLE_USER");
+        patient.getUser().setRoles(List.of(role));
         patientRepository.save(patient);
     }
 

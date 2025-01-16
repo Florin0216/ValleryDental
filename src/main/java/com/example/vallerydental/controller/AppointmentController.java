@@ -23,8 +23,8 @@ public class AppointmentController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/appointments/{id}")
-    public String getPatientAppointments(@PathVariable Integer id, Model model) {
+    @GetMapping("/user/appointments/{id}")
+    public String getPatientAppointments(@PathVariable("id") Integer id, Model model) {
         List<Appointment> appointments = appointmentService.getAppointmentsForPatient(id);
         Patient patient = patientService.getPatientById(id);
         model.addAttribute("patient", patient);
@@ -73,4 +73,6 @@ public class AppointmentController {
         appointmentService.deleteAppointment(id);
         return "redirect:/appointments/" + patient.getId();
     }
+
+
 }

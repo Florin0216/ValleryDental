@@ -37,4 +37,5 @@ public class AppointmentService {
     public void deleteAppointment(Integer id) {
         appointmentRepository.deleteById(id);
     }
+
 }

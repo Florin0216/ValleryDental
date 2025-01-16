@@ -5,11 +5,16 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "Dentist")
 public class Dentist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dentistid", nullable = false)
     private Integer id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userid", nullable = false)
+    private User user;
 
     @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
@@ -89,6 +94,15 @@ public class Dentist {
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
+    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Integer getId() {
