@@ -3,9 +3,11 @@ package com.example.vallerydental.controller;
 import com.example.vallerydental.model.Appointment;
 import com.example.vallerydental.model.Dentist;
 import com.example.vallerydental.model.Patient;
+import com.example.vallerydental.model.User;
 import com.example.vallerydental.service.AppointmentService;
 import com.example.vallerydental.service.DentistService;
 import com.example.vallerydental.service.PatientService;
+import com.example.vallerydental.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +18,20 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final DentistService dentistService;
     private final PatientService patientService;
+    private final UserService userService;
 
-    public AppointmentController(AppointmentService appointmentService, DentistService dentistService, PatientService patientService) {
+    public AppointmentController(AppointmentService appointmentService, DentistService dentistService, PatientService patientService, UserService userService) {
         this.appointmentService = appointmentService;
         this.dentistService = dentistService;
         this.patientService = patientService;
+        this.userService = userService;
     }
 
-    @GetMapping("/user/appointments/{id}")
-    public String getPatientAppointments(@PathVariable("id") Integer id, Model model) {
-        List<Appointment> appointments = appointmentService.getAppointmentsForPatient(id);
-        Patient patient = patientService.getPatientById(id);
+    @GetMapping("/user/appointments/{username}")
+    public String getPatientAppointments(@PathVariable("username") String username, Model model) {
+        User user = userService.findByUsername(username);
+        Patient patient = patientService.findByUser(user);
+        List<Appointment> appointments = appointmentService.getAppointmentsForPatient(patient.getId());
         model.addAttribute("patient", patient);
         model.addAttribute("appointments", appointments);
         return "Appointment/patientAppointments";
@@ -48,7 +53,7 @@ public class AppointmentController {
     public String createAppointment(@ModelAttribute("appointment") Appointment appointment) {
         appointment.setStatus("Scheduled");
         appointmentService.addAppointment(appointment);
-        return "redirect:/appointments/" + appointment.getPatient().getId();
+        return "redirect:/user/appointments/" + appointment.getPatient().getUser().getUsername();
     }
 
     @GetMapping("/appointments/edit/{id}")
@@ -63,7 +68,7 @@ public class AppointmentController {
     @PostMapping("/appointments/edit/{id}")
     public String updateAppointment(@PathVariable Integer id, @ModelAttribute("appointment") Appointment appointment) {
         appointmentService.updateAppointment(id, appointment);
-        return "redirect:/appointments/" + appointment.getPatient().getId();
+        return "redirect:/user/appointments/" + appointment.getPatient().getUser().getUsername();
     }
 
     @GetMapping("appointments/delete/{id}")
@@ -71,8 +76,6 @@ public class AppointmentController {
         Appointment appointment = appointmentService.getAppointmentById(id);
         Patient patient = appointment.getPatient();
         appointmentService.deleteAppointment(id);
-        return "redirect:/appointments/" + patient.getId();
+        return "redirect:/user/appointments/" + patient.getUser().getUsername();
     }
-
-
 }

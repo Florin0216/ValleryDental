@@ -2,6 +2,7 @@ package com.example.vallerydental.service;
 
 import com.example.vallerydental.model.Patient;
 import com.example.vallerydental.model.Role;
+import com.example.vallerydental.model.User;
 import com.example.vallerydental.repository.PatientRepository;
 import com.example.vallerydental.repository.RoleRepository;
 import com.example.vallerydental.repository.UserRepository;
@@ -52,5 +53,9 @@ public class PatientService {
 
     public void deletePatient(Integer id) {
         patientRepository.deleteById(id);
+    }
+
+    public Patient findByUser(User user) {
+        return patientRepository.findByUser(user);
     }
 }

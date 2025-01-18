@@ -2,8 +2,6 @@ package com.example.vallerydental.controller;
 
 import com.example.vallerydental.model.Patient;
 import com.example.vallerydental.service.PatientService;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +14,11 @@ public class ContentController {
 
     public ContentController(PatientService patientService) {
         this.patientService = patientService;
+    }
+
+    @GetMapping("/")
+    public String redirectToHome() {
+        return "redirect:/home";
     }
 
     @GetMapping("/home")
@@ -36,11 +39,7 @@ public class ContentController {
     }
 
     @GetMapping("/login")
-    public String DisplayLoginPage(@AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails == null) {
+    public String DisplayLoginPage() {
             return "Login";
-        } else {
-            return "redirect:/user/appointments/9";
-        }
     }
 }

@@ -13,18 +13,25 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final CustomAuthenticationSuccessHandler successHandler;
+
+    public SecurityConfig(CustomAuthenticationSuccessHandler successHandler) {
+        this.successHandler = successHandler;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/home", "/login", "/register" , "/css/**", "/webjars/**","/images/**").permitAll()
+                        .requestMatchers("/","/home", "/login", "/register" , "/css/**", "/webjars/**","/images/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
+                        .successHandler(successHandler)
                 );
         return http.build();
     }
