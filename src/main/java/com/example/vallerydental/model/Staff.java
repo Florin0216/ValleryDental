@@ -5,90 +5,29 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "Staff")
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "staffid", nullable = false)
+    @Column(name = "staff_id", nullable = false)
     private Integer id;
 
-    @Column(name = "firstname", nullable = false, length = 50)
-    private String firstname;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id", nullable = false)
+    private Person person;
 
-    @Column(name = "lastname", nullable = false, length = 50)
-    private String lastname;
-
-    @Column(name = "cnpstaff", nullable = false, length = 13)
-    private String cnpstaff;
-
-    @Column(name = "gender", length = Integer.MAX_VALUE)
-    private String gender;
-
-    @Column(name = "phone", length = 20)
-    private String phone;
-
-    @Column(name = "email", length = 100)
-    private String email;
-
-    @Column(name = "staffrole", length = 20)
-    private String staffrole;
+    @Column(name = "staff_role", length = 20)
+    private String staffRole;
 
     @ManyToMany(mappedBy = "assistants")
     private List<Appointment> appointments;
 
-    public String getStaffrole() {
-        return staffrole;
+    public String getStaffRole() {
+        return staffRole;
     }
 
-    public void setStaffrole(String staffrole) {
-        this.staffrole = staffrole;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getCnpstaff() {
-        return cnpstaff;
-    }
-
-    public void setCnpstaff(String cnpstaff) {
-        this.cnpstaff = cnpstaff;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setStaffRole(String staffRole) {
+        this.staffRole = staffRole;
     }
 
     public Integer getId() {

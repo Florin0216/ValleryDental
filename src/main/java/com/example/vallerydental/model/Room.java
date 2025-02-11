@@ -5,43 +5,44 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "Room")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roomid", nullable = false)
+    @Column(name = "room_id", nullable = false)
     private Integer id;
 
-    @Column(name = "roomname", nullable = false, length = 50)
-    private String roomname;
+    @Column(name = "room_name", nullable = false, length = 50)
+    private String roomName;
 
     @Column(name = "capacity")
     private Integer capacity;
 
-    @Column(name = "roomfloor")
-    private Integer roomfloor;
+    @Column(name = "room_floor")
+    private Integer roomFloor;
 
     @ManyToMany
     @JoinTable(
-            name = "Uses",
-            joinColumns = @JoinColumn(name = "roomID"),
-            inverseJoinColumns = @JoinColumn(name = "dentistID")
+            name = "Room_Dentist",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "dentist_id")
     )
     private List<Dentist> dentists;
 
     @ManyToMany
     @JoinTable(
-            name = "Holds",
-            joinColumns = @JoinColumn(name = "roomID"),
-            inverseJoinColumns = @JoinColumn(name = "equipmentID")
+            name = "Room_Equipment",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "equipment_id")
     )
     private List<Equipment> equipments;
 
-    public Integer getRoomfloor() {
-        return roomfloor;
+    public Integer getRoomFloor() {
+        return roomFloor;
     }
 
-    public void setRoomfloor(Integer roomfloor) {
-        this.roomfloor = roomfloor;
+    public void setRoomFloor(Integer roomFloor) {
+        this.roomFloor = roomFloor;
     }
 
     public Integer getCapacity() {
@@ -52,12 +53,12 @@ public class Room {
         this.capacity = capacity;
     }
 
-    public String getRoomname() {
-        return roomname;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setRoomname(String roomname) {
-        this.roomname = roomname;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     public Integer getId() {

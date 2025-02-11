@@ -9,7 +9,7 @@ import java.util.Collection;
 public class Role implements GrantedAuthority{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roleid", nullable = false)
+    @Column(name = "role_id", nullable = false)
     private Integer id;
 
     @Column(name = "name", nullable = false, length = 50)

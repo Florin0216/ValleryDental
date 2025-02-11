@@ -9,59 +9,33 @@ import java.util.List;
 public class Dentist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dentistid", nullable = false)
+    @Column(name = "dentist_id", nullable = false)
     private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userid", nullable = false)
-    private User user;
-
-    @Column(name = "firstname", nullable = false, length = 50)
-    private String firstname;
-
-    @Column(name = "lastname", nullable = false, length = 50)
-    private String lastname;
-
-    @Column(name = "cnpdentist", nullable = false, length = 13)
-    private String cnpdentist;
+    @JoinColumn(name = "person_id", nullable = false)
+    private Person person;
 
     @Column(name = "specialization", length = 50)
     private String specialization;
 
-    @Column(name = "gender", length = Integer.MAX_VALUE)
-    private String gender;
-
-    @Column(name = "phone", length = 20)
-    private String phone;
-
-    @Column(name = "email", length = 100)
-    private String email;
-
     @ManyToMany(mappedBy = "dentists")
     private List<Room> rooms;
 
-    public String getEmail() {
-        return email;
+    public Integer getId() {
+        return id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getPhone() {
-        return phone;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public String getSpecialization() {
@@ -70,46 +44,5 @@ public class Dentist {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
-    }
-
-    public String getCnpdentist() {
-        return cnpdentist;
-    }
-
-    public void setCnpdentist(String cnpdentist) {
-        this.cnpdentist = cnpdentist;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 }

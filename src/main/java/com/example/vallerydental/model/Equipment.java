@@ -6,47 +6,24 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Table(name = "Equipment")
 public class Equipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "equipmentid", nullable = false)
+    @Column(name = "equipment_id", nullable = false)
     private Integer id;
 
-    @Column(name = "equipmentname", nullable = false, length = 50)
-    private String equipmentname;
+    @Column(name = "equipment_name", nullable = false, length = 50)
+    private String equipmentName;
 
-    @Column(name = "equipmentdescription", length = 100)
-    private String equipmentdescription;
+    @Column(name = "equipment_description", length = 100)
+    private String equipmentDescription;
 
-    @Column(name = "purchasedate")
-    private LocalDate purchasedate;
+    @Column(name = "purchase_date")
+    private LocalDate purchaseDate;
 
     @ManyToMany(mappedBy = "equipments")
     private List<Room> rooms;
-
-    public LocalDate getPurchasedate() {
-        return purchasedate;
-    }
-
-    public void setPurchasedate(LocalDate purchasedate) {
-        this.purchasedate = purchasedate;
-    }
-
-    public String getEquipmentdescription() {
-        return equipmentdescription;
-    }
-
-    public void setEquipmentdescription(String equipmentdescription) {
-        this.equipmentdescription = equipmentdescription;
-    }
-
-    public String getEquipmentname() {
-        return equipmentname;
-    }
-
-    public void setEquipmentname(String equipmentname) {
-        this.equipmentname = equipmentname;
-    }
 
     public Integer getId() {
         return id;
@@ -54,5 +31,29 @@ public class Equipment {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getEquipmentName() {
+        return equipmentName;
+    }
+
+    public void setEquipmentName(String equipmentName) {
+        this.equipmentName = equipmentName;
+    }
+
+    public String getEquipmentDescription() {
+        return equipmentDescription;
+    }
+
+    public void setEquipmentDescription(String equipmentDescription) {
+        this.equipmentDescription = equipmentDescription;
+    }
+
+    public LocalDate getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(LocalDate purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 }

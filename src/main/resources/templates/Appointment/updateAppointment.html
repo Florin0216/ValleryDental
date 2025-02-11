@@ -6,25 +6,25 @@
     <title>Edit Appointment</title>
 </head>
 <body>
-<div th:insert="~{navbar :: navbar}"></div>
+<div th:insert="~{loginNavbar :: navbar}"></div>
 <div class="justify-content-center d-flex pt-5">
     <div class="shadow card col-md-4">
         <h1 class="text-center display-6 pt-4">Edit Appointment</h1>
         <div class="card-body d-flex justify-content-center align-items-center">
             <form th:object="${appointment}" th:action="@{/appointments/edit/{id}(id=${appointment.id})}" method="post" class="w-50">
                 <div class="form-floating mb-3">
-                    <input type="date" class="form-control" id="appointmentDate" placeholder="Appointment Date" th:field="*{appointmentdate}" th:value="${#temporals.format(appointment.appointmentdate, 'dd-MM-yyyy')}">
+                    <input type="date" class="form-control" id="appointmentDate" placeholder="Appointment Date" th:field="*{appointmentDate}" th:value="${#temporals.format(appointment.appointmentDate, 'dd-MM-yyyy')}">
                     <label for="appointmentDate">Appointment Date</label>
                 </div>
                 <div>
-                    <input type="hidden" th:field="*{patient}" th:value="${appointment.patient}">
+                    <input type="hidden" th:field="*{person}" th:value="${appointment.person}">
                 </div>
                 <div class="form-floating mb-3">
                     <select class="form-select" id="cnpDentist" th:field="*{dentist}">
                         <option value="" disabled selected>Select a Dentist</option>
                         <option th:each="dentist : ${dentists}"
                                 th:value="${dentist.id}"
-                                th:text="${dentist.firstname + ' ' + dentist.lastname}"></option>
+                                th:text="${dentist.person.firstName + ' ' + dentist.person.lastName}"></option>
                     </select>
                     <label for="cnpDentist">Dentist</label>
                 </div>

@@ -1,51 +1,18 @@
 package com.example.vallerydental.service;
 
 import com.example.vallerydental.model.Dentist;
-import com.example.vallerydental.model.Role;
-import com.example.vallerydental.repository.DentistRepository;
-import com.example.vallerydental.repository.RoleRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class DentistService {
-    private final DentistRepository dentistRepository;
-    private final RoleRepository roleRepository;
+public interface DentistService {
 
-    public DentistService(DentistRepository dentistRepository, RoleRepository roleRepository) {
-        this.dentistRepository = dentistRepository;
-        this.roleRepository = roleRepository;
-    }
+    Dentist getDentistById(int id);
 
-    public Dentist getDentistById(int id) {
-        return dentistRepository.findById(id).orElse(null);
-    }
+    List<Dentist> getAllDentist();
 
-    public List<Dentist> getAllDentist() {
-        return dentistRepository.findAll();
-    }
+    void createDentist(Dentist dentist);
 
-    public void createDentist(Dentist dentist) {
-        Role userRole = roleRepository.findByName("USER");
-        Role adminRole = roleRepository.findByName("ADMIN");
-        dentist.getUser().setRoles(List.of(userRole, adminRole));
-        dentistRepository.save(dentist);
-    }
+    void updateDentist(Integer id, Dentist dentist);
 
-    public void updateDentist(Integer id, Dentist dentist) {
-        Dentist existingDentist = dentistRepository.getReferenceById(id);
-        existingDentist.setFirstname(dentist.getFirstname());
-        existingDentist.setLastname(dentist.getLastname());
-        existingDentist.setEmail(dentist.getEmail());
-        existingDentist.setPhone(dentist.getPhone());
-        existingDentist.setGender(dentist.getGender());
-        existingDentist.setCnpdentist(dentist.getCnpdentist());
-        existingDentist.setSpecialization(dentist.getSpecialization());
-        dentistRepository.save(existingDentist);
-    }
-
-    public void deleteDentist(int id) {
-        dentistRepository.deleteById(id);
-    }
+    void deleteDentist(int id);
 }

@@ -7,52 +7,53 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Table(name = "Receipt")
 public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "receiptid", nullable = false)
+    @Column(name = "receipt_id", nullable = false)
     private Integer id;
 
-    @Column(name = "totalcost")
-    private BigDecimal totalcost;
+    @Column(name = "total_cost")
+    private BigDecimal totalCost;
 
-    @Column(name = "issueddate")
-    private LocalDate issueddate;
+    @Column(name = "issued_date")
+    private LocalDate issuedDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "patientid", nullable = false)
-    private Patient patient;
+    @JoinColumn(name = "person_id", nullable = false)
+    private Person person;
 
     @ManyToMany
     @JoinTable(
-            name = "Invoiced",
-            joinColumns = @JoinColumn(name = "receiptID"),
-            inverseJoinColumns = @JoinColumn(name = "treatmentID")
+            name = "Receipt_Treatment",
+            joinColumns = @JoinColumn(name = "receipt_id"),
+            inverseJoinColumns = @JoinColumn(name = "treatment_id")
     )
     private List<Treatment> treatments;
 
-    public Patient getPatient() {
-        return patient;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
-    public LocalDate getIssueddate() {
-        return issueddate;
+    public LocalDate getIssuedDate() {
+        return issuedDate;
     }
 
-    public void setIssueddate(LocalDate issueddate) {
-        this.issueddate = issueddate;
+    public void setIssuedDate(LocalDate issuedDate) {
+        this.issuedDate = issuedDate;
     }
 
-    public BigDecimal getTotalcost() {
-        return totalcost;
+    public BigDecimal getTotalCost() {
+        return totalCost;
     }
 
-    public void setTotalcost(BigDecimal totalcost) {
-        this.totalcost = totalcost;
+    public void setTotalCost(BigDecimal totalCost) {
+        this.totalCost = totalCost;
     }
 
     public Integer getId() {

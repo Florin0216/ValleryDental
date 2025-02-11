@@ -1,12 +1,12 @@
 package com.example.vallerydental.repository;
 
-import com.example.vallerydental.model.Patient;
+import com.example.vallerydental.model.Person;
 import com.example.vallerydental.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PatientRepository extends JpaRepository<Patient, Integer> {
+public interface PersonRepository extends JpaRepository<Person, Integer> {
 
-    Patient findByUser(User user);
+    Person findByUser(User user);
 }

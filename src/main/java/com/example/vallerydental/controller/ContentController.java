@@ -1,7 +1,7 @@
 package com.example.vallerydental.controller;
 
-import com.example.vallerydental.model.Patient;
-import com.example.vallerydental.service.PatientService;
+import com.example.vallerydental.model.Person;
+import com.example.vallerydental.service.impl.PersonServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ContentController {
-    private final PatientService patientService;
+    private final PersonServiceImpl personServiceImpl;
 
-    public ContentController(PatientService patientService) {
-        this.patientService = patientService;
+    public ContentController(PersonServiceImpl personServiceImpl) {
+        this.personServiceImpl = personServiceImpl;
     }
 
     @GetMapping("/")
@@ -28,13 +28,13 @@ public class ContentController {
 
     @GetMapping("/register")
     public String DisplayRegisterPage(Model model) {
-        model.addAttribute("patient", new Patient());
+        model.addAttribute("person", new Person());
         return "Register";
     }
 
     @PostMapping("/register")
-    public String registerPatient(@ModelAttribute("patient") Patient patient) {
-        patientService.addPatient(patient);
+    public String registerPatient(@ModelAttribute("person") Person person) {
+        personServiceImpl.addPerson(person);
         return "redirect:/login";
     }
 
@@ -42,4 +42,5 @@ public class ContentController {
     public String DisplayLoginPage() {
             return "Login";
     }
+
 }

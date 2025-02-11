@@ -2,80 +2,129 @@ package com.example.vallerydental.controller;
 
 import com.example.vallerydental.model.Appointment;
 import com.example.vallerydental.model.Dentist;
-import com.example.vallerydental.model.Patient;
+import com.example.vallerydental.model.Person;
 import com.example.vallerydental.model.User;
-import com.example.vallerydental.service.AppointmentService;
-import com.example.vallerydental.service.DentistService;
-import com.example.vallerydental.service.PatientService;
-import com.example.vallerydental.service.UserService;
+import com.example.vallerydental.service.impl.AppointmentServiceImpl;
+import com.example.vallerydental.service.impl.DentistServiceImpl;
+import com.example.vallerydental.service.impl.PersonServiceImpl;
+import com.example.vallerydental.service.impl.UserServiceImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class AppointmentController {
-    private final AppointmentService appointmentService;
-    private final DentistService dentistService;
-    private final PatientService patientService;
-    private final UserService userService;
+    private final AppointmentServiceImpl appointmentServiceImpl;
+    private final DentistServiceImpl dentistServiceImpl;
+    private final PersonServiceImpl personServiceImpl;
+    private final UserServiceImpl userService;
 
-    public AppointmentController(AppointmentService appointmentService, DentistService dentistService, PatientService patientService, UserService userService) {
-        this.appointmentService = appointmentService;
-        this.dentistService = dentistService;
-        this.patientService = patientService;
+    public AppointmentController(AppointmentServiceImpl appointmentServiceImpl,
+                                 DentistServiceImpl dentistServiceImpl,
+                                 PersonServiceImpl personServiceImpl,
+                                 UserServiceImpl userService) {
+
+        this.appointmentServiceImpl = appointmentServiceImpl;
+        this.dentistServiceImpl = dentistServiceImpl;
+        this.personServiceImpl = personServiceImpl;
         this.userService = userService;
     }
 
-    @GetMapping("/user/appointments/{username}")
-    public String getPatientAppointments(@PathVariable("username") String username, Model model) {
-        User user = userService.findByUsername(username);
-        Patient patient = patientService.findByUser(user);
-        List<Appointment> appointments = appointmentService.getAppointmentsForPatient(patient.getId());
-        model.addAttribute("patient", patient);
+    @GetMapping("/user/appointments/{id}")
+    public String getPatientAppointments(@PathVariable("id") Integer id, Model model) {
+        Optional<User> user = userService.findById(id);
+        Person person = personServiceImpl.findByUser(user.orElse(null));
+        List<Appointment> appointments = appointmentServiceImpl.getAppointmentsForPatient(person.getPersonID());
+
+        model.addAttribute("person", person);
+        model.addAttribute("username", user.get().getUsername());
         model.addAttribute("appointments", appointments);
+
         return "Appointment/patientAppointments";
     }
 
-    @GetMapping("/appointments/new/{id}")
-    public String showCreateAppointmentForm(@PathVariable Integer id, Model model) {
-        Appointment appointment = new Appointment();
-        Patient patient = patientService.getPatientById(id);
-        List<Dentist> dentists = dentistService.getAllDentist();
-        appointment.setPatient(patient);
+    @GetMapping("/appointments/availability")
+    public String showCheckAvailabilityForm(Model model) {
+        List<Dentist> dentists = dentistServiceImpl.getAllDentist();
         model.addAttribute("dentists", dentists);
-        model.addAttribute("patient", patient);
+        model.addAttribute("date", LocalDate.now());
+        return "Appointment/checkAvailability";
+    }
+
+    @PostMapping("/appointments/availability")
+    public String checkAvailability(
+            @RequestParam Integer dentistId,
+            @RequestParam LocalDate date) {
+
+        return "redirect:/appointments/new/?dentistId=" + dentistId + "&date=" + date;
+    }
+
+    @GetMapping("/appointments/new/")
+    public String showCreateAppointmentForm(
+            @RequestParam(required = false) LocalDate date,
+            @RequestParam(required = false) Integer dentistId,
+            @AuthenticationPrincipal User user,
+            Model model) {
+
+        Appointment appointment = new Appointment();
+        List<Dentist> dentists = dentistServiceImpl.getAllDentist();
+        Dentist selectedDentist = dentistServiceImpl.getDentistById(dentistId);
+        List<String> availableHours = appointmentServiceImpl.getAvailableHours(date, selectedDentist);
+
+        model.addAttribute("dentists", dentists);
         model.addAttribute("appointment", appointment);
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("defaultAvailableHours", availableHours);
+        model.addAttribute("selectedDentist", selectedDentist);
+        model.addAttribute("selectedDate", date);
+
         return "Appointment/createAppointment";
     }
 
     @PostMapping("/appointments")
-    public String createAppointment(@ModelAttribute("appointment") Appointment appointment) {
-        appointment.setStatus("Scheduled");
-        appointmentService.addAppointment(appointment);
-        return "redirect:/user/appointments/" + appointment.getPatient().getUser().getUsername();
+    public String createAppointment(@ModelAttribute("appointment") Appointment appointment,
+                                    @RequestParam Integer dentistId,
+                                    @RequestParam LocalDate appointmentDate,
+                                    @AuthenticationPrincipal User user) {
+
+        Dentist selectedDentist = dentistServiceImpl.getDentistById(dentistId);
+        Person selectedPerson = personServiceImpl.findByUser(user);
+        appointmentServiceImpl.addAppointment(selectedDentist, selectedPerson, appointmentDate, appointment);
+
+        return "redirect:/user/appointments/" + appointment.getPerson().getUser().getId();
     }
 
     @GetMapping("/appointments/edit/{id}")
-    public String showEditAppointmentForm(@PathVariable Integer id, Model model) {
-        Appointment appointment = appointmentService.getAppointmentById(id);
-        List<Dentist> dentists = dentistService.getAllDentist();
+    public String showEditAppointmentForm(@PathVariable Integer id,@AuthenticationPrincipal User user, Model model) {
+
+        Appointment appointment = appointmentServiceImpl.getAppointmentById(id);
+        List<Dentist> dentists = dentistServiceImpl.getAllDentist();
+
         model.addAttribute("dentists", dentists);
         model.addAttribute("appointment", appointment);
+        model.addAttribute("username", user.getUsername());
+
         return "Appointment/updateAppointment";
     }
 
     @PostMapping("/appointments/edit/{id}")
     public String updateAppointment(@PathVariable Integer id, @ModelAttribute("appointment") Appointment appointment) {
-        appointmentService.updateAppointment(id, appointment);
-        return "redirect:/user/appointments/" + appointment.getPatient().getUser().getUsername();
+        appointmentServiceImpl.updateAppointment(id, appointment);
+
+        return "redirect:/user/appointments/" + appointment.getPerson().getUser().getId();
     }
 
-    @GetMapping("appointments/delete/{id}")
+    @GetMapping("/appointments/delete/{id}")
     public String deleteAppointment(@PathVariable Integer id) {
-        Appointment appointment = appointmentService.getAppointmentById(id);
-        Patient patient = appointment.getPatient();
-        appointmentService.deleteAppointment(id);
-        return "redirect:/user/appointments/" + patient.getUser().getUsername();
+        Appointment appointment = appointmentServiceImpl.getAppointmentById(id);
+        Person person = appointment.getPerson();
+        appointmentServiceImpl.deleteAppointment(id);
+
+        return "redirect:/user/appointments/" + person.getUser().getId();
     }
 }

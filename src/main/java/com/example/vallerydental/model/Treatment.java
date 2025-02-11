@@ -6,17 +6,18 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
+@Table(name = "Treatment")
 public class Treatment {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "treatmentid", nullable = false)
+    @Column(name = "treatment_id", nullable = false)
     private Integer id;
 
-    @Column(name = "treatmentname", nullable = false, length = 50)
-    private String treatmentname;
+    @Column(name = "treatment_name", nullable = false, length = 50)
+    private String treatmentName;
 
-    @Column(name = "treatmentdescription", length = Integer.MAX_VALUE)
-    private String treatmentdescription;
+    @Column(name = "treatment_description", length = Integer.MAX_VALUE)
+    private String treatmentDescription;
 
     @Column(name = "price")
     private BigDecimal price;
@@ -35,20 +36,20 @@ public class Treatment {
         this.price = price;
     }
 
-    public String getTreatmentdescription() {
-        return treatmentdescription;
+    public String getTreatmentDescription() {
+        return treatmentDescription;
     }
 
-    public void setTreatmentdescription(String treatmentdescription) {
-        this.treatmentdescription = treatmentdescription;
+    public void setTreatmentDescription(String treatmentDescription) {
+        this.treatmentDescription = treatmentDescription;
     }
 
-    public String getTreatmentname() {
-        return treatmentname;
+    public String getTreatmentName() {
+        return treatmentName;
     }
 
-    public void setTreatmentname(String treatmentname) {
-        this.treatmentname = treatmentname;
+    public void setTreatmentName(String treatmentName) {
+        this.treatmentName = treatmentName;
     }
 
     public Integer getId() {

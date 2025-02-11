@@ -1,41 +1,31 @@
 package com.example.vallerydental.service;
 
 import com.example.vallerydental.model.Appointment;
-import com.example.vallerydental.repository.AppointmentRepository;
-import org.springframework.stereotype.Service;
+import com.example.vallerydental.model.Dentist;
+import com.example.vallerydental.model.Person;
+import org.springframework.scheduling.annotation.Scheduled;
 
+import java.time.LocalDate;
 import java.util.List;
 
-@Service
-public class AppointmentService {
-    private final AppointmentRepository appointmentRepository;
+public interface AppointmentService {
 
-    public AppointmentService(AppointmentRepository appointmentRepository) {
-        this.appointmentRepository = appointmentRepository;
-    }
+    List<Appointment> getAppointmentsForPatient(Integer id);
 
-    public List<Appointment> getAppointmentsForPatient(Integer id) {
-        return appointmentRepository.findByPatient_Id(id);
-    }
+    void addAppointment(Dentist selectedDentist, Person selectedPerson, LocalDate appointmentDate, Appointment appointment);
 
-    public void addAppointment(Appointment appointment) {
-        appointmentRepository.save(appointment);
-    }
+    Appointment getAppointmentById(Integer id);
 
-    public Appointment getAppointmentById(Integer id) {
-        return appointmentRepository.findAppointmentById(id);
-    }
+    void updateAppointment(Integer id, Appointment updatedAppointment);
 
-    public void updateAppointment(Integer id, Appointment updatedAppointment){
-        Appointment existingAppointment = appointmentRepository.findAppointmentById(id);
-        existingAppointment.setAppointmentdate(updatedAppointment.getAppointmentdate());
-        existingAppointment.setDentist(updatedAppointment.getDentist());
-        existingAppointment.setStatus(updatedAppointment.getStatus());
-        appointmentRepository.save(existingAppointment);
-    }
+    void deleteAppointment(Integer id);
 
-    public void deleteAppointment(Integer id) {
-        appointmentRepository.deleteById(id);
-    }
+    List<Appointment> getCurrentAppointments();
 
+    List<Appointment> getCompletedAppointments();
+
+    List<String> getAvailableHours(LocalDate date, Dentist dentist);
+
+    @Scheduled(cron = "0 * * * * *")
+    void sendAppointmentsReminder();
 }
