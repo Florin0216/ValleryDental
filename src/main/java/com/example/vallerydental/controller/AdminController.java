@@ -6,6 +6,7 @@ import com.example.vallerydental.model.Person;
 import com.example.vallerydental.service.impl.AppointmentServiceImpl;
 import com.example.vallerydental.service.impl.DentistServiceImpl;
 import com.example.vallerydental.service.impl.PersonServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +17,15 @@ import java.util.List;
 
 @Controller
 public class AdminController {
+    private final AppointmentServiceImpl appointmentService;
+    private final PersonServiceImpl personService;
+    private final DentistServiceImpl dentistService;
 
-    private final AppointmentServiceImpl appointmentServiceImpl;
-    private final PersonServiceImpl personServiceImpl;
-    private final DentistServiceImpl dentistServiceImpl;
-
-    public AdminController(AppointmentServiceImpl appointmentServiceImpl, PersonServiceImpl personServiceImpl, DentistServiceImpl dentistServiceImpl) {
-        this.appointmentServiceImpl = appointmentServiceImpl;
-        this.personServiceImpl = personServiceImpl;
-        this.dentistServiceImpl = dentistServiceImpl;
+    @Autowired
+    public AdminController(AppointmentServiceImpl appointmentService, PersonServiceImpl personService, DentistServiceImpl dentistService) {
+        this.appointmentService = appointmentService;
+        this.personService = personService;
+        this.dentistService = dentistService;
     }
 
     @GetMapping("/admin/dashboard")
@@ -36,7 +37,7 @@ public class AdminController {
 
     @GetMapping("/admin/appointments")
     public String showAppointments(@AuthenticationPrincipal User user, Model model) {
-        List<Appointment> appointments = appointmentServiceImpl.getCurrentAppointments();
+        List<Appointment> appointments = appointmentService.getCurrentAppointments();
 
         model.addAttribute("appointments", appointments);
         model.addAttribute("username", user.getUsername());
@@ -46,7 +47,7 @@ public class AdminController {
 
     @GetMapping("/admin/history")
     public String showHistory(@AuthenticationPrincipal User user, Model model) {
-        List<Appointment> appointments = appointmentServiceImpl.getCompletedAppointments();
+        List<Appointment> appointments = appointmentService.getCompletedAppointments();
 
         model.addAttribute("appointments", appointments);
         model.addAttribute("username", user.getUsername());
@@ -56,7 +57,7 @@ public class AdminController {
 
     @GetMapping("/admin/patients")
     public String showPatients(@AuthenticationPrincipal User user, Model model) {
-        List<Person> persons = personServiceImpl.getAllPatients();
+        List<Person> persons = personService.getAllPatients();
 
         model.addAttribute("patients", persons);
         model.addAttribute("username", user.getUsername());
@@ -66,7 +67,7 @@ public class AdminController {
 
     @GetMapping("/admin/dentists")
     public String showDentists(@AuthenticationPrincipal User user, Model model) {
-        List<Dentist> dentists = dentistServiceImpl.getAllDentist();
+        List<Dentist> dentists = dentistService.getAllDentist();
 
         model.addAttribute("dentists", dentists);
         model.addAttribute("username", user.getUsername());

@@ -1,7 +1,8 @@
 package com.example.vallerydental.controller;
 
 import com.example.vallerydental.model.Person;
-import com.example.vallerydental.service.impl.PersonServiceImpl;
+import com.example.vallerydental.service.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class ContentController {
-    private final PersonServiceImpl personServiceImpl;
+    private final PersonService personService;
 
-    public ContentController(PersonServiceImpl personServiceImpl) {
-        this.personServiceImpl = personServiceImpl;
+    @Autowired
+    public ContentController(PersonService personService) {
+        this.personService = personService;
     }
 
     @GetMapping("/")
@@ -34,7 +36,7 @@ public class ContentController {
 
     @PostMapping("/register")
     public String registerPatient(@ModelAttribute("person") Person person) {
-        personServiceImpl.addPerson(person);
+        personService.addPerson(person);
         return "redirect:/login";
     }
 

@@ -27,7 +27,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         User user = userRepository.findByUsername(username);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        String redirectUrl = "/user/appointments/" + user.getId();
+        String redirectUrl = "/user/" + user.getId() + "/appointments";
 
         for (GrantedAuthority authority : authorities) {
             if(authority.getAuthority().equals("ROLE_ADMIN")) {

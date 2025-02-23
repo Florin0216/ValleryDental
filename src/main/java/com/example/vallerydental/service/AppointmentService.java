@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AppointmentService {
 
-    List<Appointment> getAppointmentsForPatient(Integer id);
+    List<Appointment> getAppointmentsByIdAndStatus(Person person,String status);
 
     void addAppointment(Dentist selectedDentist, Person selectedPerson, LocalDate appointmentDate, Appointment appointment);
 
@@ -28,4 +28,8 @@ public interface AppointmentService {
 
     @Scheduled(cron = "0 * * * * *")
     void sendAppointmentsReminder();
+
+    Appointment getAppointmentByToken(String token);
+
+    void saveAppointment(Appointment appointment);
 }

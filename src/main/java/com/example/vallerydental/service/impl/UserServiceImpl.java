@@ -2,6 +2,7 @@ package com.example.vallerydental.service.impl;
 
 import com.example.vallerydental.model.User;
 import com.example.vallerydental.repository.UserRepository;
+import com.example.vallerydental.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {

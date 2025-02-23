@@ -1,6 +1,7 @@
 package com.example.vallerydental.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +15,7 @@ public class Appointment {
     private Integer id;
 
     @Column(name = "appointment_date", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate appointmentDate;
 
     @Column(name = "status", length = 20)
@@ -32,6 +34,9 @@ public class Appointment {
 
     @Column(name = "appointment_reminder", nullable = false)
     private boolean appointmentReminder = false;
+
+    @Column(name = "appointment_confirmation", length = 100)
+    private String appointmentConfirmation;
 
     @ManyToMany
     @JoinTable(
@@ -103,5 +108,13 @@ public class Appointment {
 
     public void setAppointmentReminder(boolean appointmentReminder) {
         this.appointmentReminder = appointmentReminder;
+    }
+
+    public String getAppointmentConfirmation() {
+        return appointmentConfirmation;
+    }
+
+    public void setAppointmentConfirmation(String appointmentConfirmation) {
+        this.appointmentConfirmation = appointmentConfirmation;
     }
 }

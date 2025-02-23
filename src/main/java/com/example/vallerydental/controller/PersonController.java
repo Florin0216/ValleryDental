@@ -1,6 +1,7 @@
 package com.example.vallerydental.controller;
 
 import com.example.vallerydental.model.Person;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import com.example.vallerydental.service.impl.PersonServiceImpl;
@@ -12,10 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class PersonController {
-    private final PersonServiceImpl personServiceImpl;
+    private final PersonServiceImpl personService;
 
-    public PersonController(PersonServiceImpl personServiceImpl) {
-        this.personServiceImpl = personServiceImpl;
+    @Autowired
+    public PersonController(PersonServiceImpl personService) {
+        this.personService = personService;
     }
 
     @GetMapping("/patients/create")
@@ -26,26 +28,26 @@ public class PersonController {
 
     @PostMapping("/patients")
     public String createPatient(@ModelAttribute("patient") Person person) {
-        personServiceImpl.addPerson(person);
+        personService.addPerson(person);
         return "redirect:/admin/patients";
     }
 
     @GetMapping("/patients/update/{id}")
     public String updatePatientForm(@PathVariable Integer id, Model model) {
-        Person patient = personServiceImpl.getPatientById(id);
+        Person patient = personService.getPatientById(id);
         model.addAttribute("patient", patient);
         return "Patient/updatePatient";
     }
 
     @PostMapping("/patients/update/{id}")
     public String updatePatient(@ModelAttribute("patient") Person person, @PathVariable Integer id) {
-        personServiceImpl.updatePatient(id, person);
+        personService.updatePatient(id, person);
         return "redirect:/admin/patients";
     }
 
     @GetMapping("/patients/delete/{id}")
     public String deletePatient(@PathVariable Integer id) {
-        personServiceImpl.deletePatient(id);
+        personService.deletePatient(id);
         return "redirect:/admin/patients";
     }
 }

@@ -5,34 +5,40 @@ import com.example.vallerydental.model.Dentist;
 import com.example.vallerydental.model.Person;
 import com.example.vallerydental.repository.AppointmentRepository;
 import com.example.vallerydental.service.AppointmentService;
+import com.example.vallerydental.service.EmailService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
 
     private final AppointmentRepository appointmentRepository;
-    private final EmailServiceImpl emailServiceImpl;
+    private final EmailService emailService;
 
-    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, EmailServiceImpl emailServiceImpl) {
+    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, EmailService emailService) {
         this.appointmentRepository = appointmentRepository;
-        this.emailServiceImpl = emailServiceImpl;
+        this.emailService = emailService;
     }
 
-    public List<Appointment> getAppointmentsForPatient(Integer id) {
-        return appointmentRepository.findAppointmentByPerson_PersonID(id);
+    public List<Appointment> getAppointmentsByIdAndStatus(Person person,String status) {
+        return appointmentRepository.findAppointmentsByPersonAndStatus(person, status);
     }
 
     public void addAppointment(Dentist selectedDentist, Person selectedPerson,LocalDate appointmentDate, Appointment appointment) {
         appointment.setPerson(selectedPerson);
         appointment.setDentist(selectedDentist);
         appointment.setAppointmentDate(appointmentDate);
-        appointment.setStatus("Scheduled");
-        emailServiceImpl.sendSimpleMessage(selectedPerson.getEmail(),"Test","Acesta este un email de test");
+        appointment.setStatus("Pending");
+        String confirmationToken = UUID.randomUUID().toString();
+        appointment.setAppointmentConfirmation(confirmationToken);
+
         appointmentRepository.save(appointment);
+        emailService.sendSimpleMessage(selectedPerson.getEmail(), "Test",
+                "Confirma programarea prin linkul de mai jos.\n" + "http://localhost:8080/confirm-appointment?token=" + confirmationToken);
     }
 
     public Appointment getAppointmentById(Integer id) {
@@ -41,7 +47,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     public void updateAppointment(Integer id, Appointment updatedAppointment){
         Appointment existingAppointment = appointmentRepository.findAppointmentById(id);
-        existingAppointment.setAppointmentTime(updatedAppointment.getAppointmentTime());
         existingAppointment.setAppointmentDate(updatedAppointment.getAppointmentDate());
         existingAppointment.setDentist(updatedAppointment.getDentist());
         existingAppointment.setStatus(updatedAppointment.getStatus());
@@ -89,11 +94,19 @@ public class AppointmentServiceImpl implements AppointmentService {
         for (Appointment appointment : appointments) {
             if(!appointment.isAppointmentReminder()){
                 String personEmail = appointment.getPerson().getEmail();
-                emailServiceImpl.sendSimpleMessage(personEmail,"Test","Acesta este un reminder!");
+                emailService.sendSimpleMessage(personEmail,"Test","Acesta este un reminder!");
                 appointment.setAppointmentReminder(true);
                 appointmentRepository.save(appointment);
             }
         }
+    }
+
+    public void saveAppointment(Appointment appointment) {
+        appointmentRepository.save(appointment);
+    }
+
+    public Appointment getAppointmentByToken(String token) {
+        return appointmentRepository.getAppointmentByAppointmentConfirmation(token);
     }
 
 }

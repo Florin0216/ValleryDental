@@ -3,6 +3,7 @@ package com.example.vallerydental.controller;
 
 import com.example.vallerydental.model.Dentist;
 import com.example.vallerydental.service.impl.DentistServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class DentistController {
-    private final DentistServiceImpl dentistServiceImpl;
+    private final DentistServiceImpl dentistService;
 
-    public DentistController(DentistServiceImpl dentistServiceImpl) {
-        this.dentistServiceImpl = dentistServiceImpl;
+    @Autowired
+    public DentistController(DentistServiceImpl dentistService) {
+        this.dentistService = dentistService;
     }
 
     @GetMapping("/dentists/create")
@@ -27,26 +29,26 @@ public class DentistController {
 
     @PostMapping("/dentists")
     public String createDentist(@ModelAttribute("dentist") Dentist dentist) {
-        dentistServiceImpl.createDentist(dentist);
+        dentistService.createDentist(dentist);
         return "redirect:/admin/dentists";
     }
 
     @GetMapping("/dentists/update/{id}")
     public String updateDentistForm(@PathVariable Integer id, Model model) {
-        Dentist dentist = dentistServiceImpl.getDentistById(id);
+        Dentist dentist = dentistService.getDentistById(id);
         model.addAttribute("dentist", dentist);
         return "Dentist/updateDentist";
     }
 
     @PostMapping("/dentists/update/{id}")
     public String updateDentist(@ModelAttribute("dentist") Dentist dentist, @PathVariable Integer id) {
-        dentistServiceImpl.updateDentist(id, dentist);
+        dentistService.updateDentist(id, dentist);
         return "redirect:/admin/dentists";
     }
 
     @GetMapping("/dentists/delete/{id}")
     public String deleteDentist(@PathVariable Integer id) {
-        dentistServiceImpl.deleteDentist(id);
+        dentistService.deleteDentist(id);
         return "redirect:/admin/dentists";
     }
 }
